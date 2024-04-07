@@ -45,7 +45,7 @@ function insertAfterLastVip(newOrder) {
   } 
   else if(lastVipOrderIndex == -1){
     // If there are no existing VIP orders, simply append the new order
-    pendingArea.insertBefore(newOrder, pendingOrders[1]);
+    pendingArea.insertBefore(newOrder, pendingOrders[0]);
   }
 }
 
@@ -60,8 +60,8 @@ function addBot() {
   if (stopAddingBot) return;
 
   // Check if there are pending orders
-  if (pendingArea.children.length > 1) {
-    const order = pendingArea.children[1]; // Skip the h2 element
+  if (pendingArea.children.length > 0) {
+    const order = pendingArea.children[0]; // Access the first pending order
 
     // Start the timer immediately
     const timer = setTimeout(() => {
@@ -70,15 +70,16 @@ function addBot() {
       botCount--;
 
       // Check if there are more pending orders and adding bots should not be stopped
-      if (pendingArea.children.length > 1 && !stopAddingBot) {
+      if (pendingArea.children.length > 0 && !stopAddingBot) {
         addBot(); // Process next order
       }
-    }, 10000 - (new Date().getTime() % 10000)); // Calculate the time to wait until the next 10-second mark
+    }, 10000); // 10 seconds delay
 
     // Store the timer to be able to clear it if needed
     order.dataset.timer = timer;
   }
 }
+
 
 function removeBot() {
   if (botCount > 0) {
